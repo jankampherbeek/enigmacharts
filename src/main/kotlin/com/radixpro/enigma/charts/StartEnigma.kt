@@ -1,7 +1,11 @@
+/*
+ * Jan Kampherbeek, (c)  2021.
+ * Enigma Charts is open source.
+ * Please check the file copyright.txt in the root of the source for further details
+ */
 package com.radixpro.enigma.charts
 
 import com.radixpro.enigma.charts.di.Injector
-import com.radixpro.enigma.libfe.texts.Rosetta
 import javafx.application.Application
 import javafx.stage.Stage
 

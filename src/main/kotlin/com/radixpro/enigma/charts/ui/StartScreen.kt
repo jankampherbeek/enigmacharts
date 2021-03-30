@@ -1,5 +1,11 @@
+/*
+ * Jan Kampherbeek, (c)  2021.
+ * Enigma Charts is open source.
+ * Please check the file copyright.txt in the root of the source for further details
+ */
 package com.radixpro.enigma.charts.ui
 
+import com.radixpro.enigma.charts.AppLauncher
 import com.radixpro.enigma.charts.shared.Dictionary.GAP
 import com.radixpro.enigma.charts.shared.Dictionary.STYLESHEET
 import com.radixpro.enigma.charts.shared.Dictionary.STYLE_SUBTITLE_PANE
@@ -19,6 +25,8 @@ import javafx.scene.layout.GridPane
 import javafx.scene.layout.Pane
 import javafx.stage.Modality
 import javafx.stage.Stage
+import java.util.*
+
 
 class StartScreen {
     private val height = 600.0
@@ -59,6 +67,7 @@ class StartScreen {
     private lateinit var miManual: MenuItem
     private lateinit var miAbout: MenuItem
     private var statusComplete = false
+    private lateinit var version: String
 
     private lateinit var stage: Stage
 
@@ -73,14 +82,22 @@ class StartScreen {
         stage.show()
     }
 
+
     private fun initialize() {
-        txtTitle = Rosetta.getText("screenstart.title")
+        defineVersion()
+        txtTitle = Rosetta.getText("screenstart.title") + " " + version
         defineButtons()
         menuBar = createMenuBar()
         defineListeners()
         subtitleChartsPane = defineSubTitlePane(Rosetta.getText("screenstart.subtitlecharts"))
         subtitleConfigsPane = defineSubTitlePane(Rosetta.getText("screenstart.subtitleconfigs"))
         checkStatus()
+    }
+
+    private fun defineVersion() {
+        val properties = Properties()
+        properties.load(this.javaClass.classLoader.getResourceAsStream("app.properties"))
+        version = properties.getProperty("version")
     }
 
     private fun createGridPane(): GridPane {
