@@ -5,7 +5,6 @@
  */
 package com.radixpro.enigma.charts.ui
 
-import com.radixpro.enigma.charts.AppLauncher
 import com.radixpro.enigma.charts.shared.Dictionary.GAP
 import com.radixpro.enigma.charts.shared.Dictionary.STYLESHEET
 import com.radixpro.enigma.charts.shared.Dictionary.STYLE_SUBTITLE_PANE
@@ -16,7 +15,8 @@ import com.radixpro.enigma.charts.shared.Dictionary.SUBTITLE_HEIGHT
 import com.radixpro.enigma.charts.shared.Dictionary.TITLE_HEIGHT
 import com.radixpro.enigma.charts.shared.Help
 import com.radixpro.enigma.libfe.fxbuilders.*
-import com.radixpro.enigma.libfe.texts.Rosetta
+import com.radixpro.enigma.libfe.texts.Rosetta.getText
+import com.radixpro.enigma.libfe.texts.Rosetta.getHelpText
 import javafx.event.EventHandler
 import javafx.geometry.Insets
 import javafx.scene.Scene
@@ -25,10 +25,11 @@ import javafx.scene.layout.GridPane
 import javafx.scene.layout.Pane
 import javafx.stage.Modality
 import javafx.stage.Stage
+import javafx.application.Platform
 import java.util.*
 
 
-class StartScreen {
+class StartScreen(private val aboutScreen: AboutScreen) {
     private val height = 600.0
     private val width = 800.0
     private lateinit var subtitleChartsPane: Pane
@@ -85,12 +86,12 @@ class StartScreen {
 
     private fun initialize() {
         defineVersion()
-        txtTitle = Rosetta.getText("screenstart.title") + " " + version
+        txtTitle = getText("screenstart.title") + " " + version
         defineButtons()
         menuBar = createMenuBar()
         defineListeners()
-        subtitleChartsPane = defineSubTitlePane(Rosetta.getText("screenstart.subtitlecharts"))
-        subtitleConfigsPane = defineSubTitlePane(Rosetta.getText("screenstart.subtitleconfigs"))
+        subtitleChartsPane = defineSubTitlePane(getText("screenstart.subtitlecharts"))
+        subtitleConfigsPane = defineSubTitlePane(getText("screenstart.subtitleconfigs"))
         checkStatus()
     }
 
@@ -131,7 +132,7 @@ class StartScreen {
             .setStyleClass(STYLE_TITLE_PANE)
             .setChildren(arrayListOf(
                 LabelBuilder()
-                .setText(Rosetta.getText("screenstart.title"))
+                .setText(getText("screenstart.title"))
                 .setPrefWidth(width)
                 .setStyleClass(STYLE_TITLE_TEXT)
                 .build()))
@@ -153,27 +154,25 @@ class StartScreen {
     }
 
     private fun defineListViewCharts(): ListView<String> {
-        val listView = ListViewBuilder().setPrefHeight(180.0).setPrefWidth(width).build()
-        return listView
+        return ListViewBuilder().setPrefHeight(180.0).setPrefWidth(width).build()
     }
 
     private fun defineListViewConfigs(): ListView<String> {
-        val listView = ListViewBuilder().setPrefHeight(120.0).setPrefWidth(width).build()
-        return listView
+        return ListViewBuilder().setPrefHeight(120.0).setPrefWidth(width).build()
     }
 
     private fun defineButtons() {
-        btnRemoveChart = ButtonBuilder().setText(Rosetta.getText("shared.btn_remove")).build()
-        btnNewChart = ButtonBuilder().setText(Rosetta.getText("shared.btn_new")).build()
-        btnSearchChart = ButtonBuilder().setText(Rosetta.getText("shared.btn_search")).build()
-        btnSaveChart = ButtonBuilder().setText(Rosetta.getText("shared.btn_save")).build()
-        btnWheel = ButtonBuilder().setText(Rosetta.getText("screenstart.btn_wheel")).build()
-        btnPositions = ButtonBuilder().setText(Rosetta.getText("screenstart.btn_positions")).build()
-        btnAnalysis = ButtonBuilder().setText(Rosetta.getText("screenstart.btn_analysis")).build()
-        btnProgressive = ButtonBuilder().setText(Rosetta.getText("screenstart.btn_progressive")).build()
-        btnManageConfigs = ButtonBuilder().setText(Rosetta.getText("screenstart.btn_manageconfigs")).build()
-        btnHelp = ButtonBuilder().setText(Rosetta.getText("shared.btn_help")).build()
-        btnExit = ButtonBuilder().setText(Rosetta.getText("shared.btn_exit")).build()
+        btnRemoveChart = ButtonBuilder().setText(getText("shared.btn_remove")).build()
+        btnNewChart = ButtonBuilder().setText(getText("shared.btn_new")).build()
+        btnSearchChart = ButtonBuilder().setText(getText("shared.btn_search")).build()
+        btnSaveChart = ButtonBuilder().setText(getText("shared.btn_save")).build()
+        btnWheel = ButtonBuilder().setText(getText("screenstart.btn_wheel")).build()
+        btnPositions = ButtonBuilder().setText(getText("screenstart.btn_positions")).build()
+        btnAnalysis = ButtonBuilder().setText(getText("screenstart.btn_analysis")).build()
+        btnProgressive = ButtonBuilder().setText(getText("screenstart.btn_progressive")).build()
+        btnManageConfigs = ButtonBuilder().setText(getText("screenstart.btn_manageconfigs")).build()
+        btnHelp = ButtonBuilder().setText(getText("shared.btn_help")).build()
+        btnExit = ButtonBuilder().setText(getText("shared.btn_exit")).build()
     }
 
     private fun defineListeners() {
@@ -218,39 +217,39 @@ class StartScreen {
     }
 
     private fun createMenuBar(): MenuBar {
-        val menuCharts = Menu(Rosetta.getText("menustart.chart"))
-        val menuEdit = Menu(Rosetta.getText("menustart.edit"))
-        val menuShow = Menu(Rosetta.getText("menustart.show"))
-        val menuAnalysis = Menu(Rosetta.getText("menustart.analysis"))
-        val menuDivisions = Menu(Rosetta.getText("menustart.analysis.division"))
-        val menuProgressive = Menu(Rosetta.getText("menustart.progressive"))
-        val menuHelp = Menu(Rosetta.getText("menustart.help"))
-        miNewChart = MenuItem(Rosetta.getText("menustart.chart.new"))
-        miSearchChart = MenuItem(Rosetta.getText("menustart.chart.search"))
-        miSaveChart = MenuItem(Rosetta.getText("menustart.chart.save"))
-        miDeleteChart = MenuItem(Rosetta.getText("menustart.chart.delete"))
+        val menuCharts = Menu(getText("menustart.chart"))
+        val menuEdit = Menu(getText("menustart.edit"))
+        val menuShow = Menu(getText("menustart.show"))
+        val menuAnalysis = Menu(getText("menustart.analysis"))
+        val menuDivisions = Menu(getText("menustart.analysis.division"))
+        val menuProgressive = Menu(getText("menustart.progressive"))
+        val menuHelp = Menu(getText("menustart.help"))
+        miNewChart = MenuItem(getText("menustart.chart.new"))
+        miSearchChart = MenuItem(getText("menustart.chart.search"))
+        miSaveChart = MenuItem(getText("menustart.chart.save"))
+        miDeleteChart = MenuItem(getText("menustart.chart.delete"))
         menuCharts.items.addAll(miNewChart, miSearchChart, miSaveChart, miDeleteChart)
-        miSettings = MenuItem(Rosetta.getText("menustart.edit.settings"))
-        miManageConfig = MenuItem(Rosetta.getText("menustart.edit.manageconfig"))
+        miSettings = MenuItem(getText("menustart.edit.settings"))
+        miManageConfig = MenuItem(getText("menustart.edit.manageconfig"))
         menuEdit.items.addAll(miSettings, miManageConfig)
-        miWheel = MenuItem(Rosetta.getText("menustart.show.wheel"))
-        miPositions = MenuItem(Rosetta.getText("menustart.show.positions"))
+        miWheel = MenuItem(getText("menustart.show.wheel"))
+        miPositions = MenuItem(getText("menustart.show.positions"))
         menuShow.items.addAll(miWheel, miPositions)
-        miAspects = MenuItem(Rosetta.getText("menustart.analysis.aspects"))
-        miMidpoints = MenuItem(Rosetta.getText("menustart.analysis.midpoints"))
-        miHarmonics = MenuItem(Rosetta.getText("menustart.analysis.harmonics"))
-        miDecanates = MenuItem(Rosetta.getText("menustart.analysis.division.decanates"))
-        miTerms = MenuItem(Rosetta.getText("menustart.analysis.division.terms"))
-        miDodecatemoria = MenuItem(Rosetta.getText("menustart.analysis.division.dodecatemoria"))
+        miAspects = MenuItem(getText("menustart.analysis.aspects"))
+        miMidpoints = MenuItem(getText("menustart.analysis.midpoints"))
+        miHarmonics = MenuItem(getText("menustart.analysis.harmonics"))
+        miDecanates = MenuItem(getText("menustart.analysis.division.decanates"))
+        miTerms = MenuItem(getText("menustart.analysis.division.terms"))
+        miDodecatemoria = MenuItem(getText("menustart.analysis.division.dodecatemoria"))
         menuDivisions.items.addAll(miDecanates, miTerms, miDodecatemoria)
         menuAnalysis.items.addAll(miAspects, miMidpoints, miHarmonics, menuDivisions)
-        miTransits = MenuItem(Rosetta.getText("menustart.progressive.transits"))
-        miSecundary = MenuItem(Rosetta.getText("menustart.progressive.secundary"))
-        miPrimary = MenuItem(Rosetta.getText("menustart.progressive.primary"))
-        miSolar = MenuItem(Rosetta.getText("menustart.progressive.solar"))
+        miTransits = MenuItem(getText("menustart.progressive.transits"))
+        miSecundary = MenuItem(getText("menustart.progressive.secundary"))
+        miPrimary = MenuItem(getText("menustart.progressive.primary"))
+        miSolar = MenuItem(getText("menustart.progressive.solar"))
         menuProgressive.items.addAll(miTransits, miSecundary, miPrimary, miSolar)
-        miManual = MenuItem(Rosetta.getText("menustart.help.manual"))
-        miAbout = MenuItem(Rosetta.getText("menustart.help.about"))
+        miManual = MenuItem(getText("menustart.help.manual"))
+        miAbout = MenuItem(getText("menustart.help.about"))
         menuHelp.items.addAll(miManual, miAbout)
         return MenuBar(menuCharts, menuEdit, menuShow, menuAnalysis, menuProgressive, menuHelp)
     }
@@ -338,15 +337,15 @@ class StartScreen {
     }
 
     private fun onAbout() {
-        
+        aboutScreen.show(version)
     }
 
     private fun onHelp() {
-        Help(Rosetta.getHelpText("help.screenstart.title"),
-            Rosetta.getHelpText("help.screenstart.content")).showContent()
+        Help(getHelpText("help.screenstart.title"),
+            getHelpText("help.screenstart.content")).showContent()
     }
 
     private fun onExit() {
-
+        Platform.exit()
     }
 }

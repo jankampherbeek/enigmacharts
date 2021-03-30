@@ -5,12 +5,17 @@
  */
 package com.radixpro.enigma.charts.di
 
+import com.radixpro.enigma.charts.ui.AboutScreen
 import com.radixpro.enigma.charts.ui.StartScreen
 
 object Injector {
 
+    fun injectAboutScreen(): AboutScreen {
+        return AboutScreen()
+    }
+
     fun injectStartScreen(): StartScreen {
-        return StartScreen()
+        return StartScreen(injectAboutScreen())
     }
 
 }
